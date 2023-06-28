@@ -15,3 +15,8 @@ jobs:
 
       - name: Run a one-line script
         run: echo Hello from Octo Organization
+        
+      - name: Run a multi-line script
+        run: |
+          echo "Hello from Octo Organization"
+          echo "22222"
