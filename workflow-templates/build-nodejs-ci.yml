@@ -1,6 +1,7 @@
 name: Template Workflow Nodejs.
 
 on:
+  workflow_dispatch:
   push:
     branches: [ $default-branch ]
   pull_request:
