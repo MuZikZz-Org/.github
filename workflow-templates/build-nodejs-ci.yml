@@ -18,6 +18,9 @@ env:
     # Azure Blob Stotage 
     BLOB_STORAGE_ACC: ${{ fromJson(vars.JSON).BLOB_STORAGE_ACC }}
     BLOB_CONTAINER_NAME: ${{ fromJson(vars.JSON).BLOB_CONTAINER_NAME }}
+    # AKS
+    AKS_RESOURCE_GROUP: ${{ fromJson(vars.JSON).AKS_RESOURCE_GROUP }}
+    AKS_NAME: ${{ fromJson(vars.JSON).AKS_NAME }}
 
 jobs:
   env_workflow:
@@ -33,6 +36,8 @@ jobs:
       HELM_TEMPLATE_BRANCH: ${{env.HELM_TEMPLATE_BRANCH}}
       BLOB_STORAGE_ACC: ${{env.BLOB_STORAGE_ACC}}
       BLOB_CONTAINER_NAME: ${{env.BLOB_CONTAINER_NAME}}
+      AKS_RESOURCE_GROUP: ${{ env.AKS_RESOURCE_GROUP }}
+      AKS_NAME: ${{ env.AKS_NAME }}
     steps:
       - run: |
           echo "preparing output env"
@@ -84,8 +89,8 @@ jobs:
       APP_VERSION: ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }}
       HELM_TEMPLATE_REPO: ${{needs.env_workflow.outputs.HELM_TEMPLATE_REPO}}
       HELM_TEMPLATE_BRANCH: ${{needs.env_workflow.outputs.HELM_TEMPLATE_BRANCH}}
-      AZ_RESOURCE_GROUP: bright-rg
-      AZ_AKS_NAME: bright-aks
+      AKS_RESOURCE_GROUP: ${{needs.env_workflow.outputs.AKS_RESOURCE_GROUP}}
+      AKS_NAME: ${{needs.env_workflow.outputs.AKS_NAME}}
     secrets: #inherit
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         
