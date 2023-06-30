@@ -15,6 +15,8 @@ env:
     #HELM repo
     HELM_TEMPLATE_REPO: ${{ fromJson(vars.JSON).HELM_TEMPLATE_REPO }}
     HELM_TEMPLATE_BRANCH: ${{ fromJson(vars.JSON).HELM_TEMPLATE_BRANCH }}
+    HELM_VALUES_REPO: ${{ fromJson(vars.JSON).HELM_VALUES_REPO }}
+    HELM_VALUES_BRANCH: ${{ fromJson(vars.JSON).HELM_VALUES_BRANCH }}
     # Azure Blob Stotage 
     BLOB_STORAGE_ACC: ${{ fromJson(vars.JSON).BLOB_STORAGE_ACC }}
     BLOB_CONTAINER_NAME: ${{ fromJson(vars.JSON).BLOB_CONTAINER_NAME }}
@@ -34,6 +36,8 @@ jobs:
       AZ_CONTAINER_NAME: ${{env.AZ_CONTAINER_NAME}}
       HELM_TEMPLATE_REPO: ${{env.HELM_TEMPLATE_REPO}}
       HELM_TEMPLATE_BRANCH: ${{env.HELM_TEMPLATE_BRANCH}}
+      HELM_VALUES_REPO: ${{env.HELM_VALUES_REPO}}
+      HELM_VALUES_BRANCH: ${{env.HELM_VALUES_BRANCH}}
       BLOB_STORAGE_ACC: ${{env.BLOB_STORAGE_ACC}}
       BLOB_CONTAINER_NAME: ${{env.BLOB_CONTAINER_NAME}}
       AKS_RESOURCE_GROUP: ${{ env.AKS_RESOURCE_GROUP }}
@@ -87,8 +91,8 @@ jobs:
     with:
       APP_NAME: ${{github.event.repository.name}}
       APP_VERSION: ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }}
-      HELM_TEMPLATE_REPO: ${{needs.env_workflow.outputs.HELM_TEMPLATE_REPO}}
-      HELM_TEMPLATE_BRANCH: ${{needs.env_workflow.outputs.HELM_TEMPLATE_BRANCH}}
+      HELM_VALUES_REPO: ${{needs.env_workflow.outputs.HELM_VALUES_REPO}}
+      HELM_VALUES_BRANCH: ${{needs.env_workflow.outputs.HELM_VALUES_BRANCH}}
       AKS_RESOURCE_GROUP: ${{needs.env_workflow.outputs.AKS_RESOURCE_GROUP}}
       AKS_NAME: ${{needs.env_workflow.outputs.AKS_NAME}}
     secrets: #inherit
