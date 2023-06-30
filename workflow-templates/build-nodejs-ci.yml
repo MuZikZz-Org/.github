@@ -40,8 +40,8 @@ jobs:
   Setup_AZ_Reources:
     name: "Calling workflow Azure login"
     uses: brightza008/poc-github-workflow/.github/workflows/az-authen.yaml@workflow
-    secrets:
-      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+    secrets: inherit
+      # AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
 
   Build_Docker_ACR:
     needs: env_workflow
