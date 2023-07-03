@@ -3,6 +3,6 @@
     "description": "Scan your code with SonarCloud.",
     "iconName": "octicon hubot",
     "categories": [
-        "DevSecOps"
+        "code-scanner"
     ]
 }
