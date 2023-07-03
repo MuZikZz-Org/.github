@@ -1,8 +1,0 @@
-{
-    "name": "SonarQube scanner on SonarCloud",
-    "description": "Scan your code with SonarCloud.",
-    "iconName": "octicon hubot",
-    "categories": [
-        "code-scanner"
-    ]
-}
