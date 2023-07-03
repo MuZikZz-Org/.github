@@ -1,8 +1,8 @@
 {
-    "name": "Build/Deploy Helm to AKS Workflow",
-    "description": "Nodejs CI starter workflow.",
+    "name": "SonarQube scanner on SonarCloud",
+    "description": "Scan your code with SonarCloud.",
     "iconName": "octicon hubot",
     "categories": [
-        "Nodejs"
+        "code-scanner"
     ]
 }
