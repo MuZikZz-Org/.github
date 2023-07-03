@@ -1,0 +1,9 @@
+
+{
+    "name": "SonarQube scanner on SonarCloud",
+    "description": "Scan your code with SonarCloud.",
+    "iconName": "",
+    "categories": [
+        "DevSecOps"
+    ]
+}
