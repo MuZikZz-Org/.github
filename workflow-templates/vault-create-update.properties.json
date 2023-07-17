@@ -1,0 +1,8 @@
+{
+    "name": "Vault-create-update",
+    "description": "vault injection.",
+    "iconName": "octicon hubot",
+    "categories": [
+        "Hashicorp Vault"
+    ]
+}
