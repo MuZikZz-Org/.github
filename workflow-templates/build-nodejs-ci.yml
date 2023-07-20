@@ -97,4 +97,4 @@ jobs:
       AKS_NAME: ${{needs.env_workflow.outputs.AKS_NAME}}
     secrets: #inherit
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        
+      
