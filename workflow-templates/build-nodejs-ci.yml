@@ -64,7 +64,7 @@ jobs:
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       
   TEST_CALL_OUTPUT:
-    runs-on: ubuntu-latest
+    runs-on: runner-utility
     needs: Build_Docker_ACR
     steps:
       - run: |
