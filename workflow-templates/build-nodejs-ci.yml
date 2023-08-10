@@ -3,11 +3,14 @@ name: Template Workflow Nodejs.
 on:
   workflow_dispatch:
   push:
-    branches: [ $default-branch ]
-  pull_request:
-    branches: [ $default-branch ]
+    branches: #[ $default-branch ]
+      - 'feature/**'
+  # pull_request:
+  #   branches: [ $default-branch ]
+  
 
 env: 
+    JobEnvironment: "feature-branch",
     PackageName: ${{github.event.repository.name}}
     # ACR
     AZ_CONTAINER_REGISTRY: ${{ fromJson(vars.JSON).AZ_CONTAINER_REGISTRY }}
@@ -27,10 +30,11 @@ env:
 jobs:
   env_workflow:
     runs-on: ubuntu-latest
-    name: Setup Output Env
+    name: Preparation Environment
     outputs: 
       user: ${{env.docker_user}}
       pass: ${{env.docker_password}}
+      JobEnvironment: ${{env.JobEnvironment}}
       PackageName: ${{env.PackageName}}
       AZ_CONTAINER_REGISTRY: ${{env.AZ_CONTAINER_REGISTRY}}
       AZ_CONTAINER_NAME: ${{env.AZ_CONTAINER_NAME}}
@@ -89,6 +93,8 @@ jobs:
     name: "Helm deploy to AKS"
     uses: MuZikZz-Org/action-workflow/.github/workflows/helm-aks.yaml@main
     with:
+      JobEnvironment: ${{needs.env_workflow.outputs.JobEnvironment}}  #feature-branch
+      SourceCodeBranch: ${{github.ref_name}}  #feature/test/1
       APP_NAME: ${{github.event.repository.name}}
       APP_VERSION: ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }}
       HELM_VALUES_REPO: ${{needs.env_workflow.outputs.HELM_VALUES_REPO}}
