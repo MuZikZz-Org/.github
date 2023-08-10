@@ -10,7 +10,7 @@ on:
   
 
 env: 
-    JobEnvironment: "feature-branch",
+    JobEnvironment: "feature-branch"
     PackageName: ${{github.event.repository.name}}
     # ACR
     AZ_CONTAINER_REGISTRY: ${{ fromJson(vars.JSON).AZ_CONTAINER_REGISTRY }}
