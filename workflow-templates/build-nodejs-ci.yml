@@ -56,6 +56,18 @@ jobs:
     secrets: #inherit
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
 
+  Package_Versioning:
+    needs: env_workflow
+    name: Package versioning
+    uses: MuZikZz-Org/action-workflow/.github/workflows/package-versioning.yaml@main
+
+  OUTPUT_PackageVersioning:
+    runs-on: runner-utility
+    needs: Package_Versioning
+    steps:
+      - run: |
+          echo "Package Output form Workflow PackageVersioning" ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION }}"
+
   Build_Docker_ACR:
     needs: env_workflow
     name: "Build Docker to ACR"
