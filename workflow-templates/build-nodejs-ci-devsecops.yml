@@ -105,10 +105,8 @@ jobs:
     secrets: #inherit
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       
-  Create_PR:
+  Push_Git_Tag:
     needs: Deploy_helm
-    name: create pull reauest to main branch
+    name: Push Git Tag
     uses: MuZikZz-Org/action-workflow/.github/workflows/create-pullrequest.yaml@main
-    with:
-      SourceCodeRepo:  ${{ github.repository }}
-      SourceCodeBranch: ${{github.ref_name}}
+
