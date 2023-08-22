@@ -66,7 +66,7 @@ jobs:
     needs: Package_Versioning
     steps:
       - run: |
-          echo "Package Output form Workflow PackageVersioning" ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION }}"
+          echo "Package Output form Workflow PackageVersioning: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION }}"
 
   Build_Docker_ACR:
     needs: env_workflow
