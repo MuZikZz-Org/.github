@@ -15,7 +15,7 @@ jobs:
           npm install sonarqube-scanner -g 
           REPO_NAME="${{ github.event.client_payload.repository }}"
           echo "Repository name from Workflow 1: $REPO_NAME"
-          git clone https://github.com/NatthidaK/$REPO_NAME
+          git clone https://github.com/MuZikZz-Org/$REPO_NAME
           sudo mv $REPO_NAME/config-sonar.json ./
           #sudo rm -rf $REPO_NAME
           # Read the JSON file into a variable
