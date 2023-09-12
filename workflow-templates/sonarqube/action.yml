@@ -10,7 +10,8 @@ runs:
   steps:
       - name: Set Variables
         id: set-variables
-        run: | 
+        run: |
+          npm install sonarqube-scanner -g 
           SONARQUBE_URL=${{ inputs.SONARQUBE_URL }}
           SONARQUBE_TOKEN=${{ inputs.SONARQUBE_TOKEN }}
           PROJECT_KEY=${{ inputs.PROJECT_KEY }}
