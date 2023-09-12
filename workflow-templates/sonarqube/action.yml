@@ -34,7 +34,6 @@ runs:
             git clone "$REPOSITORY_URL" "$DESTINATION_DIR"
           fi
 
-          echo "clone done"
 
           # Create SonarQube project
           curl -u "${SONARQUBE_TOKEN}:" -X POST "${SONARQUBE_URL}/api/projects/create" \
