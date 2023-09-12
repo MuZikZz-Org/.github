@@ -25,7 +25,15 @@ runs:
           echo $PROJECT_NAME"
           echo $DESTINATION_DIR"
           echo $REPOSITORY_URL
-          git clone "$REPOSITORY_URL" "$DESTINATION_DIR"
+
+          pwd
+          
+          current_dir=$(pwd)
+
+          if [ "$DESTINATION_DIR" != "$current_dir" ]; then
+            git clone "$REPOSITORY_URL" "$DESTINATION_DIR"
+          fi
+
           echo "clone done"
 
           # Create SonarQube project
