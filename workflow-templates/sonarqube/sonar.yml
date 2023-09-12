@@ -1,0 +1,47 @@
+name: sonarqube-template
+
+on:
+  repository_dispatch:
+    types: [run-sonarqube]
+
+
+runs:
+  using: "composite"
+  steps:
+      - name: Set Variables
+        id: set-variables
+        run: | 
+          SONARQUBE_URL=${{ inputs.SONARQUBE_URL }}
+          SONARQUBE_TOKEN=${{ inputs.SONARQUBE_TOKEN }}
+          PROJECT_KEY=${{ inputs.PROJECT_KEY }}
+          PROJECT_NAME=${{ inputs.PROJECT_NAME }}
+          DESTINATION_DIR=${{ inputs.DESTINATION_DIR }}
+          REPOSITORY_URL=${{ inputs.REPOSITORY_URL }}
+          
+          echo $SONARQUBE_TOKEN
+          echo $SONARQUBE_URL"
+          echo $PROJECT_KEY"
+          echo $PROJECT_NAME"
+          echo $DESTINATION_DIR"
+          echo $REPOSITORY_URL
+          git clone "$REPOSITORY_URL" "$DESTINATION_DIR"
+          echo "clone done"
+
+          # Create SonarQube project
+          curl -u "${SONARQUBE_TOKEN}:" -X POST "${SONARQUBE_URL}/api/projects/create" \
+            -d "key=${PROJECT_KEY}" \
+            -d "name=${PROJECT_NAME}" 
+            echo "Create SonarQube project done"
+
+          # Run SonarQube scanner from the cloned repository directory
+          ls
+          cd "$DESTINATION_DIR"
+          echo "cd done"
+          
+          sonar-scanner \
+            -Dsonar.host.url="${SONARQUBE_URL}" \
+            -Dsonar.login="${SONARQUBE_TOKEN}" \
+            -Dsonar.projectKey="${PROJECT_KEY}" \
+            -Dsonar.sources=./ 
+            echo "Analyze code using SonarQube Scanner"
+        shell: bash
