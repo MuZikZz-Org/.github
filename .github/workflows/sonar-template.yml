@@ -1,0 +1,55 @@
+name: workflow_02
+on: [repository_dispatch]
+jobs:
+  running:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.client_payload.workflow }} == 'test-sonar.yml'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Set Variables
+        id: set-variables
+        run: |
+          
+          npm install sonarqube-scanner -g 
+          REPO_NAME="${{ github.event.client_payload.repository }}"
+          echo "Repository name from Workflow 1: $REPO_NAME"
+          git clone https://github.com/NatthidaK/$REPO_NAME
+          sudo mv $REPO_NAME/config-sonar.json ./
+          #sudo rm -rf $REPO_NAME
+          # Read the JSON file into a variable
+          json=$(cat config-sonar.json)
+          
+          # Use jq to parse the JSON and set as environment variables
+          export $(echo "$json" | jq -r "to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+          
+          SONARQUBE_TOKEN="${{ secrets.SONARQUBE_TOKEN }}"
+          # Now, you can access the variables
+          echo $SONARQUBE_URL"
+          echo $PROJECT_KEY"
+          echo $PROJECT_NAME"
+          echo $DESTINATION_DIR"
+          echo $REPOSITORY_URL
+
+          # Clone the repository
+          git clone "$REPOSITORY_URL" "$DESTINATION_DIR"
+          echo "clone done"
+
+          # Create SonarQube project
+          curl -u "${SONARQUBE_TOKEN}:" -X POST "${SONARQUBE_URL}/api/projects/create" \
+            -d "key=${PROJECT_KEY}" \
+            -d "name=${PROJECT_NAME}" 
+            echo "Create SonarQube project done"
+
+          # Run SonarQube scanner from the cloned repository directory
+          ls
+          cd "$DESTINATION_DIR"
+          echo "cd done"
+          
+          sonar-scanner \
+            -Dsonar.host.url="${SONARQUBE_URL}" \
+            -Dsonar.login="${SONARQUBE_TOKEN}" \
+            -Dsonar.projectKey="${PROJECT_KEY}" \
+            -Dsonar.sources=./  # Adjust this to your source code location
+            echo "Analyze code using SonarQube Scanner"
