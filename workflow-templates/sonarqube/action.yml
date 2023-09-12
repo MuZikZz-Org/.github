@@ -41,7 +41,7 @@ runs:
             -d "name=${PROJECT_NAME}" 
             echo "Create SonarQube project done"
 
-          # Run SonarQube scanner from the cloned repository directory
+          # Run SonarQube scanner 
           ls
           cd "$DESTINATION_DIR"
           echo "cd done"
