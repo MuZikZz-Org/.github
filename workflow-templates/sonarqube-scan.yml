@@ -1,0 +1,84 @@
+name: Sonar scanner
+on:
+  workflow_dispatch:
+    inputs:
+      SONARQUBE_URL:
+        description: 'Enter your SONARQUBE URL'
+        required: true
+        type: string
+      PROJECT_NAME:
+        description: 'Enter your PROJECT NAME'
+        required: true
+        type: string
+      PROJECT_KEY:
+        description: 'Enter your PROJECT KEY'
+        required: true
+        type: string
+      DESTINATION_DIR:
+        description: 'Enter your DESTINATION DIRECTORY of code you want to analyze'
+        required: true
+        type: string
+      REPOSITORY_URL:
+        description: 'Enter your REPOSITORY URL of code you want to analyze'
+        required: true
+        type: string
+
+jobs:
+  sonar:
+    name: Sonar
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'  
+          java-package: jdk
+          architecture: x64
+          check-latest: false
+          server-id: github
+          overwrite-settings: true
+          job-status: success
+
+      - name: Install SonarQube Scanner
+        run: |
+          npm install sonarqube-scanner -g 
+          SONARQUBE_URL=${{ github.event.inputs.SONARQUBE_URL }}
+          SONARQUBE_TOKEN=${{ secrets.SONARQUBE_TOKEN }}
+          PROJECT_KEY=${{ github.event.inputs.PROJECT_KEY }}
+          PROJECT_NAME=${{ github.event.inputs.PROJECT_NAME }}
+          DESTINATION_DIR=${{ github.event.inputs.DESTINATION_DIR }}
+          REPOSITORY_URL=${{ github.event.inputs.REPOSITORY_URL }}
+          
+          echo $SONARQUBE_TOKEN
+          echo $SONARQUBE_URL"
+          echo $PROJECT_KEY"
+          echo $PROJECT_NAME"
+          echo $DESTINATION_DIR"
+          echo $REPOSITORY_URL
+          pwd
+          
+          current_dir=$(pwd)
+          if [ "$DESTINATION_DIR" != "$current_dir" ]; then
+            git clone "$REPOSITORY_URL" "$DESTINATION_DIR"
+          fi
+          # Create SonarQube project
+          curl -u "${SONARQUBE_TOKEN}:" -X POST "${SONARQUBE_URL}/api/projects/create" \
+            -d "key=${PROJECT_KEY}" \
+            -d "name=${PROJECT_NAME}" 
+            echo "Create SonarQube project done"
+          # Run SonarQube scanner 
+          ls
+          cd "$DESTINATION_DIR"
+          echo "cd done"
+          
+          sonar-scanner \
+            -Dsonar.host.url="${SONARQUBE_URL}" \
+            -Dsonar.login="${SONARQUBE_TOKEN}" \
+            -Dsonar.projectKey="${PROJECT_KEY}" \
+            -Dsonar.sources=./ 
+            echo "Analyze code using SonarQube Scanner"
