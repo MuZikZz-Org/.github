@@ -1,0 +1,8 @@
+{
+    "name": "Pull request merged",
+    "description": "Check Pull request merged then clear feature namespacr.",
+    "iconName": "octicon hubot",
+    "categories": [
+        "DevSevOps"
+    ]
+}
