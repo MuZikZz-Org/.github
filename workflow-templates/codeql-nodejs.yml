@@ -1,5 +1,5 @@
 
-name: Sonar scanner
+name: CodeQL nodejs
 on:
   workflow_dispatch:
   push:
