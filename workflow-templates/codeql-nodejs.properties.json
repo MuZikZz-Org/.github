@@ -1,0 +1,8 @@
+{
+    "name": "CodeQL nodejs",
+    "description": "CodeQL nodejs",
+    "iconName": "octicon hubot",
+    "categories": [
+        "Code scan"
+    ]
+}

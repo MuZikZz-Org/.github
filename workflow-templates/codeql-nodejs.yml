@@ -1,0 +1,14 @@
+
+name: Sonar scanner
+on:
+  workflow_dispatch:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  CodeQL:
+    # needs: Build_Docker_ACR
+    name: "CodeQL nodejs"
+    uses: MuZikZz-Org/action-workflow/.github/workflows/codeql-nodejs.yaml@main
