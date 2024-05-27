@@ -50,11 +50,15 @@ jobs:
       - run: |
           echo "preparing output env"
  
-  Setup_AZ_Reources:
-    name: "Calling workflow Azure login"
-    uses: MuZikZz-Org/action-workflow/.github/workflows/az-authen.yaml@main
-    secrets: #inherit
-      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+  # Setup_AZ_Reources:
+  #   name: "Calling workflow Azure login"
+  #   uses: MuZikZz-Org/action-workflow/.github/workflows/az-authen.yaml@main
+  #   secrets: #inherit
+  #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+
+  Az_login_managed_iden: 
+    name: "Calling workflow Azure login with managed identity"
+    uses: MuZikZz-Org/action-workflow/.github/workflows/az-authen-iden-selfhosted.yaml@main
 
   Package_Versioning:
     needs: env_workflow
@@ -131,3 +135,20 @@ jobs:
     with:
       SourceCodeRepo:  ${{ github.repository }}
       SourceCodeBranch: ${{github.ref_name}}
+
+  # Clean_namespace:
+  #   needs: [env_workflow,Create_PR]
+  #   name: Clean up feature namespace after mearge
+  #   uses: MuZikZz-Org/action-workflow/.github/workflows/clean-namespace.yaml@main
+  #   with:
+  #     JobEnvironment: ${{needs.env_workflow.outputs.JobEnvironment}}  #feature-branch
+  #     SourceCodeBranch: ${{github.ref_name}}  #feature/test/1
+  #     SourceCodeRepo:  ${{ github.repository }}
+  #     HELM_VALUES_REPO: ${{needs.env_workflow.outputs.HELM_VALUES_REPO}}
+  #     HELM_VALUES_BRANCH: ${{needs.env_workflow.outputs.HELM_VALUES_BRANCH}}
+  #     AKS_RESOURCE_GROUP: ${{needs.env_workflow.outputs.AKS_RESOURCE_GROUP}}
+  #     AKS_NAME: ${{needs.env_workflow.outputs.AKS_NAME}}
+  #     AZURE_STORAGE_ACC_NAME: ${{needs.env_workflow.outputs.BLOB_STORAGE_ACC}}
+  #     PR_NUMBER: ${{ needs.Create_PR.outputs.PR_NUMBER }}
+  #   secrets: #inherit
+  #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
