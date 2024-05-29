@@ -1,5 +1,5 @@
 {
-    "name": "Feature Branch Build/Deploy Helm to AKS Workflow",
+    "name": "Nodejs Build feature branch",
     "description": "Feature Branch Nodejs CI starter workflow.",
     "iconName": "octicon hubot",
     "categories": [
