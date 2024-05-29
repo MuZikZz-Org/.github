@@ -1,0 +1,9 @@
+{
+    "name": "Maven Build feature branch",
+    "description": "Feature Branch Java Maven CI starter workflow.",
+    "iconName": "octicon hubot",
+    "categories": [
+        "Java21",
+        "Maven"
+    ]
+}
