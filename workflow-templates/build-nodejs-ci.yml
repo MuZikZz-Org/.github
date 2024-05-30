@@ -46,6 +46,7 @@ jobs:
       BLOB_CONTAINER_NAME: ${{env.BLOB_CONTAINER_NAME}}
       AKS_RESOURCE_GROUP: ${{ env.AKS_RESOURCE_GROUP }}
       AKS_NAME: ${{ env.AKS_NAME }}
+      Workspace_Dir: ${{ env.Workspace_Dir }}
     steps:
       - run: |
           echo "preparing output env"
@@ -69,16 +70,19 @@ jobs:
       - run: |
           echo "Package Output form Workflow PackageVersioning: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_NODEJS }}"
           
-  Maven_Build:
-    needs: env_workflow
+  Nodejs_Build:
+    needs: [env_workflow,Package_Versioning]
     name: Build NodeJS Package
     uses: MuZikZz-Org/action-workflow/.github/workflows/nodejs-build.yaml@main
+    with: 
+      workspace: ${{needs.env_workflow.outputs.Workspace_Dir}}
 
   Build_Docker_ACR:
-    needs: env_workflow
+    needs: [env_workflow,Maven_Build,Package_Versioning]
     name: "Build Docker to ACR"
     uses: MuZikZz-Org/action-workflow/.github/workflows/docker-build-acr.yaml@main
     with:
+      workspace: ${{needs.env_workflow.outputs.Workspace_Dir}}
       APP_NAME: ${{needs.env_workflow.outputs.PackageName}}
       APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_NODEJS }} # use the output (app version) from package-versioning.yaml
       AZ_CONTAINER_REGISTRY: ${{needs.env_workflow.outputs.AZ_CONTAINER_REGISTRY}}
@@ -94,7 +98,7 @@ jobs:
           echo ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }}
     
   Helm_Build_Chart: 
-    needs: [env_workflow,Build_Docker_ACR]
+    needs: [env_workflow,Build_Docker_ACR,Package_Versioning]
     name: "Helm Build Chart to Blob storage"
     uses: MuZikZz-Org/action-workflow/.github/workflows/helm-build-chart.yaml@main
     with:
@@ -108,7 +112,7 @@ jobs:
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
  
   Deploy_helm:  ## now use Helm values form https://github.com/brightza008/poc-helmchart.git
-    needs: [env_workflow,Helm_Build_Chart] 
+    needs: [env_workflow,Helm_Build_Chart,Package_Versioning] 
     name: "Helm deploy to AKS"
     uses: MuZikZz-Org/action-workflow/.github/workflows/helm-aks.yaml@main
     with:
@@ -125,7 +129,7 @@ jobs:
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
   
   Git_tag:
-    needs: Build_Docker_ACR
+    needs: [Deploy_helm,Package_Versioning]
     name: "Pushing git tag"
     uses: MuZikZz-Org/action-workflow/.github/workflows/git-push-tag.yaml@main
     with:
