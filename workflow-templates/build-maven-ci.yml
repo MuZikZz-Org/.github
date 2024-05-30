@@ -137,7 +137,6 @@ jobs:
     uses: MuZikZz-Org/action-workflow/.github/workflows/git-push-version.yaml@main
     with:
       APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_JAVA }} # use the output (app version) from package-versioning.yaml
-      workspace: ${{needs.env_workflow.outputs.Workspace_Dir}}
       Runtime: java 
       SourceCodeBranch: ${{github.ref_name}}
 
@@ -149,7 +148,7 @@ jobs:
       APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_JAVA }} # use the output (app version) from package-versioning.yaml
       
   Create_PR:
-    needs: Deploy_helm
+    needs: [Deploy_helm,Git_Push_Version,Git_Tag]
     name: create pull reauest to main branch
     uses: MuZikZz-Org/action-workflow/.github/workflows/create-pullrequest.yaml@main
     with:
