@@ -91,13 +91,6 @@ jobs:
       AZ_CONTAINER_REGISTRY: ${{needs.env_workflow.outputs.AZ_CONTAINER_REGISTRY}}
       AZ_CONTAINER_NAME: ${{needs.env_workflow.outputs.AZ_CONTAINER_NAME}}
     # secrets: inherit # pass all secrets into reuse-workflow
-      
-  TEST_CALL_OUTPUT:
-    runs-on: runner-utility
-    needs: Build_Docker_ACR
-    steps:
-      - run: |
-          echo ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }}
     
   Helm_Build_Chart: 
     needs: [env_workflow,Build_Docker_ACR,Package_Versioning]
