@@ -80,6 +80,7 @@ jobs:
     uses: MuZikZz-Org/action-workflow/.github/workflows/docker-build-acr.yaml@main
     with:
       APP_NAME: ${{needs.env_workflow.outputs.PackageName}}
+      APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_NODEJS }} # use the output (app version) from package-versioning.yaml
       AZ_CONTAINER_REGISTRY: ${{needs.env_workflow.outputs.AZ_CONTAINER_REGISTRY}}
       AZ_CONTAINER_NAME: ${{needs.env_workflow.outputs.AZ_CONTAINER_NAME}}
     secrets: #inherit # pass all secrets into reuse-workflow
@@ -102,7 +103,7 @@ jobs:
       AZURE_STORAGE_ACC_NAME: ${{needs.env_workflow.outputs.BLOB_STORAGE_ACC}}
       AZURE_CONTAINER_NAME: ${{needs.env_workflow.outputs.BLOB_CONTAINER_NAME}}
       APP_NAME: ${{github.event.repository.name}}
-      APP_VERSION: ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }} # use the output (app version) from docker-build-acr.yaml
+      APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_NODEJS }} # use the output (app version) from package-versioning.yaml
     secrets: #inherit
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
  
@@ -114,7 +115,7 @@ jobs:
       JobEnvironment: ${{needs.env_workflow.outputs.JobEnvironment}}  #feature-branch
       SourceCodeBranch: ${{github.ref_name}}  #feature/test/1
       APP_NAME: ${{github.event.repository.name}}
-      APP_VERSION: ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }}
+      APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_NODEJS }} # use the output (app version) from package-versioning.yaml
       HELM_VALUES_REPO: ${{needs.env_workflow.outputs.HELM_VALUES_REPO}}
       HELM_VALUES_BRANCH: ${{needs.env_workflow.outputs.HELM_VALUES_BRANCH}}
       AKS_RESOURCE_GROUP: ${{needs.env_workflow.outputs.AKS_RESOURCE_GROUP}}
@@ -128,7 +129,7 @@ jobs:
     name: "Pushing git tag"
     uses: MuZikZz-Org/action-workflow/.github/workflows/git-push-tag.yaml@main
     with:
-      APP_VERSION: ${{ needs.Build_Docker_ACR.outputs.PACKAGE_VERSION }}
+      APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_NODEJS }} # use the output (app version) from package-versioning.yaml
       
   Create_PR:
     needs: Deploy_helm
