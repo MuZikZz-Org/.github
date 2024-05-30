@@ -137,7 +137,6 @@ jobs:
     uses: MuZikZz-Org/action-workflow/.github/workflows/git-push-version.yaml@main
     with:
       APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_NODEJS }} # use the output (app version) from package-versioning.yaml
-      workspace: ${{needs.env_workflow.outputs.Workspace_Dir}}
       Runtime: nodejs 
       SourceCodeBranch: ${{github.ref_name}}
 
