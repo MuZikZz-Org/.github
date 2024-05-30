@@ -139,8 +139,8 @@ jobs:
       APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_JAVA }} # use the output (app version) from package-versioning.yaml
       workspace: ${{needs.env_workflow.outputs.Workspace_Dir}}
       Runtime: java 
-      Branch: ${{needs.env_workflow.outputs.JobEnvironment}}  #feature-branch
-      
+      SourceCodeBranch: ${{github.ref_name}}
+
   Git_tag:
     needs: [Deploy_helm,Package_Versioning]
     name: "Pushing git tag"
