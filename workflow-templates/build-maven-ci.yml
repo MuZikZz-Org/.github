@@ -131,6 +131,16 @@ jobs:
     secrets: #inherit
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
   
+  Git_Push_Version:
+    needs: [env_workflow,Deploy_helm,Package_Versioning]
+    name: "Pushing git Version"
+    uses: MuZikZz-Org/action-workflow/.github/workflows/git-push-version.yaml@main
+    with:
+      APP_VERSION: ${{ needs.Package_Versioning.outputs.PACKAGE_VERSION_JAVA }} # use the output (app version) from package-versioning.yaml
+      workspace: ${{needs.env_workflow.outputs.Workspace_Dir}}
+      Runtime: java 
+      Branch: ${{needs.env_workflow.outputs.JobEnvironment}}  #feature-branch
+      
   Git_tag:
     needs: [Deploy_helm,Package_Versioning]
     name: "Pushing git tag"
