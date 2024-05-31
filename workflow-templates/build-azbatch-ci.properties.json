@@ -1,0 +1,8 @@
+{
+    "name": "Build Azure Batch Dev env.",
+    "description": "Azure Batch rc/* Branch",
+    "iconName": "octicon hubot",
+    "categories": [
+        "Azure Batch"
+    ]
+}
