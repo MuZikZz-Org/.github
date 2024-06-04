@@ -190,7 +190,7 @@ jobs:
       
   Create_PR:
     if: github.event.pull_request.merged != true
-    needs: [Deploy_helm,Git_Push_Version,Git_Tag]
+    needs: [Deploy_helm,Git_Push_Version]
     name: create pull reauest to main branch
     uses: MuZikZz-Org/action-workflow/.github/workflows/create-pullrequest.yaml@main
     with:
