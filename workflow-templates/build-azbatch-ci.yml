@@ -7,6 +7,7 @@ on:
       - 'rc/**'
 
 env: 
+    Project: "mpay-modernization"
     JobEnvironment: "dev"
     PackageName: ${{github.event.repository.name}}
     # ACR
@@ -35,6 +36,7 @@ jobs:
     outputs: 
       user: ${{env.docker_user}}
       pass: ${{env.docker_password}}
+      Project: ${{env.Project}}
       JobEnvironment: ${{env.JobEnvironment}}
       PackageName: ${{env.PackageName}}
       AZ_CONTAINER_REGISTRY: ${{env.AZ_CONTAINER_REGISTRY}}
